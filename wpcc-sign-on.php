@@ -203,7 +203,7 @@ class WPCC_Sign_On {
 	}
 
 	function cant_find_user( $message ) {
-		$err_format = __( 'We couldn\t find an account with the email <strong><code>%1$s</code></strong> to log you in with.  If you already have an account on <strong>%2$s</strong>, please make sure that <strong><code>%1$s</code></strong> is configured as the email address.', 'wpcc-sign-on' );
+		$err_format = __( 'We couldn\'t find an account with the email <strong><code>%1$s</code></strong> to log you in with.  If you already have an account on <strong>%2$s</strong>, please make sure that <strong><code>%1$s</code></strong> is configured as the email address.', 'wpcc-sign-on' );
 		$err = sprintf( $err_format, $this->user_data->email, get_bloginfo( 'name' ) );
 		$message .= sprintf( '<p class="message" id="login_error">%s</p>', $err );
 		return $message;
