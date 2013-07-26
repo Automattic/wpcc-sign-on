@@ -44,9 +44,9 @@ class WPCC_Sign_On {
 	}
 
 	function admin_init() {
-		register_setting( 'general', 'wpcc_sign_on_client_id', 'esc_attr' );
+		register_setting( 'general', 'wpcc_sign_on_client_id', 'intval' );
 		add_settings_field( 'wpcc_sign_on_client_id', '<label for="wpcc_sign_on_client_id">WPCC Client ID</label>' , array( $this, 'wpcc_sign_on_client_id_cb' ) , 'general' );
-		register_setting( 'general', 'wpcc_sign_on_client_secret', 'esc_attr' );
+		register_setting( 'general', 'wpcc_sign_on_client_secret', 'sanitize_text_field' );
 		add_settings_field( 'wpcc_sign_on_client_secret', '<label for="wpcc_sign_on_client_secret">WPCC Client Secret</label>' , array( $this, 'wpcc_sign_on_client_secret_cb' ) , 'general' );
 	}
 
