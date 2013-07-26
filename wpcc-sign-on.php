@@ -51,12 +51,12 @@ class WPCC_Sign_On {
 	}
 
 	function wpcc_sign_on_client_id_cb() {
-		$value = get_option( 'wpcc_sign_on_client_id' );
+		$value = $this->client_id;
 		echo '<input type="text" id="wpcc_sign_on_client_id" name="wpcc_sign_on_client_id" value="' . esc_attr( $value ) . '" />';
 	}
 
 	function wpcc_sign_on_client_secret_cb() {
-		$value = get_option( 'wpcc_sign_on_client_secret' );
+		$value = $this->client_secret;
 		echo '<input type="password" id="wpcc_sign_on_client_secret" name="wpcc_sign_on_client_secret" value="' . esc_attr( $value ) . '" />';
 	}
 
