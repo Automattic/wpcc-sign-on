@@ -195,8 +195,9 @@ class WPCC_Sign_On {
 		return ( is_array( $users ) && ! empty( $users ) ) ? array_shift( $users ) : $users;
 	}
 
-	function cant_find_user() {
-		return __( 'We can\'t find your user account!  Sorry!', 'wpcc-sign-on' );
+	function cant_find_user( $message ) {
+		$message .= sprintf( '<p class="message" id="login_error">%s</p>', __( 'We couldn\'t find your user account!  Sorry!', 'wpcc-sign-on' ) );
+		return $message;
 	}
 }
 
