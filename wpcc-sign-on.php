@@ -188,7 +188,8 @@ class WPCC_Sign_On {
 		) );
 
 		$users = $user_query->get_results();
-		return is_array( $users ) ? array_shift( $users ) : $users;
+
+		return ( is_array( $users ) && ! empty( $users ) ) ? array_shift( $users ) : $users;
 	}
 }
 
