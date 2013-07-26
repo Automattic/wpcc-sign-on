@@ -14,6 +14,7 @@ class WPCC_Sign_On {
 	var $request_token_url,
 		$authenticate_url,
 		$user_data_url,
+		$new_app_url_base,
 		$client_id,
 		$client_secret,
 		$redirect_url,
@@ -30,6 +31,7 @@ class WPCC_Sign_On {
 		$this->request_token_url = 'https://public-api.wordpress.com/oauth2/token';
 		$this->authenticate_url  = 'https://public-api.wordpress.com/oauth2/authenticate';
 		$this->user_data_url     = 'https://public-api.wordpress.com/rest/v1/me/';
+		$this->new_app_url_base  = 'https://developer.wordpress.com/apps/new/';
 		$this->client_id         = get_option( 'wpcc_sign_on_client_id' );
 		$this->client_secret     = get_option( 'wpcc_sign_on_client_secret' );
 		$this->redirect_url      = wp_login_url();
@@ -60,6 +62,7 @@ class WPCC_Sign_On {
 	function wpcc_sign_on_client_secret_cb() {
 		$value = $this->client_secret;
 		echo '<input type="password" id="wpcc_sign_on_client_secret" name="wpcc_sign_on_client_secret" value="' . esc_attr( $value ) . '" />';
+		echo sprintf( '<br /><a href="%1$s">%2$s</a>', esc_url( $this->get_new_app_url() ), __( 'Get new credentials', 'wpcc-sign-on' ) );
 	}
 
 	function login_init() {
@@ -201,6 +204,16 @@ class WPCC_Sign_On {
 		$err = sprintf( $err_format, $this->user_data->email, get_bloginfo( 'name' ) );
 		$message .= sprintf( '<p class="message" id="login_error">%s</p>',  );
 		return $message;
+	}
+
+	function get_new_app_url() {
+		$args = array(
+			'title'        => urlencode( get_bloginfo( 'name' ) ),
+			'description'  => urlencode( get_bloginfo( 'description' ) ),
+			'url'          => urlencode( site_url() ),
+			'redirect_uri' => urlencode( $this->redirect_url ),
+		);
+		return add_query_arg( $args, $this->new_app_url_base );
 	}
 }
 
