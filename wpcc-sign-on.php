@@ -180,6 +180,8 @@ class WPCC_Sign_On {
 			wp_safe_redirect( apply_filters( 'wpcc_sign_on_redirect', $redirect_to ) );
 			exit;
 		}
+
+		add_action( 'login_message', array( $this, 'cant_find_user' ) );
 	}
 
 	function get_user_by_wpcom_id( $wpcom_user_id ) {
@@ -191,6 +193,10 @@ class WPCC_Sign_On {
 		$users = $user_query->get_results();
 
 		return ( is_array( $users ) && ! empty( $users ) ) ? array_shift( $users ) : $users;
+	}
+
+	function cant_find_user() {
+		return __( 'We can\'t find your user account!  Sorry!', 'wpcc-sign-on' );
 	}
 }
 
