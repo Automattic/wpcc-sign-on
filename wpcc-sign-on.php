@@ -2,7 +2,7 @@
 /**
  * Plugin Name: WPCC Sign On
  * Plugin URI: http://wordpress.org/plugins/wpcc-sign-on/
- * Description: A single-sign-on via WordPress.com for your WordPress.org Account!
+ * Description: A single-sign-on via WordPress.com for your WordPress.org site!
  * Author: George Stephanis
  * Version: 1.0
  * Author URI: http://stephanis.info/
