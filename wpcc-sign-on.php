@@ -152,7 +152,7 @@ class WPCC_Sign_On {
 		}
 
 		// If we've still got nothing, create the user.
-		if ( empty( $user ) ) {
+		if ( empty( $user ) && get_option( 'users_can_register' ) ) {
 			$username = $user_data->username;
 
 			if ( username_exists( $username ) ) {
