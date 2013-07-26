@@ -72,7 +72,7 @@ class WPCC_Sign_On {
 		// If they just got forwarded back ...
 		if ( isset( $_GET['code'] ) ) {
 			if ( empty( $_GET['state'] ) ) {
-				wp_die( __( 'Warning! State variable missing after authentication', 'wpcc-sign-on' ) );
+				wp_die( __( 'Warning! State variable missing after authentication.', 'wpcc-sign-on' ) );
 			}
 
 			if ( $_GET['state'] != $this->wpcc_state ) {
