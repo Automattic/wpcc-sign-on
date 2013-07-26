@@ -184,7 +184,7 @@ class WPCC_Sign_On {
 	function get_user_by_wpcom_id( $wpcom_user_id ) {
 		$user_query = new WP_User_Query( array(
 			'meta_key'   => 'wpcom_user_id',
-			'meta_value' => $wpcom_user_id,
+			'meta_value' => intval( $wpcom_user_id ),
 		) );
 
 		$users = $user_query->get_results();
