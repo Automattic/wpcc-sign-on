@@ -13,6 +13,7 @@ class WPCC_Sign_On {
 
 	var $request_token_url,
 		$authenticate_url,
+		$user_data_url,
 		$client_id,
 		$client_secret,
 		$redirect_url,
