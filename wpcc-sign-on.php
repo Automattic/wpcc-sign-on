@@ -132,7 +132,7 @@ class WPCC_Sign_On {
 
 		$url = add_query_arg( $args, $this->authenticate_url );
 
-		return sprintf( '<a id="wpcc-sign-on" href="%1$s"><img src="//s0.wp.com/i/wpcc-button.png" width="231" /></a>', $url );
+		return sprintf( '<a id="wpcc-sign-on" href="%1$s"><img src="//s0.wp.com/i/wpcc-button.png" width="231" /></a>', esc_url( $url ) );
 	}
 
 	function auth_user( $user_data ) {
