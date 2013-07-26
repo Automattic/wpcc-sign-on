@@ -124,7 +124,7 @@ class WPCC_Sign_On {
 	}
 
 	function login_form() {
-		echo self::button();
+		echo $this->button();
 	}
 
 	function button() {
