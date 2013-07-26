@@ -124,6 +124,9 @@ class WPCC_Sign_On {
 	}
 
 	function login_form() {
+		if( ! did_action( 'login_init' ) )
+			return;
+
 		echo $this->button();
 	}
 
