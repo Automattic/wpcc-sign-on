@@ -33,11 +33,12 @@ class WPCC_Sign_On {
 		$this->client_secret     = get_option( 'wpcc_sign_on_client_secret' );
 		$this->redirect_url      = wp_login_url();
 
+		add_action( 'admin_init', array( $this, 'admin_init' ) );
+
 		if ( empty( $this->client_id ) ) {
 			return;
 		}
 
-		add_action( 'admin_init',            array( $this, 'admin_init' )            );
 		add_action( 'login_init',            array( $this, 'login_init' )            );
 		add_action( 'login_enqueue_scripts', array( $this, 'login_enqueue_scripts' ) );
 		add_action( 'login_form',            array( $this, 'login_form' )            );
