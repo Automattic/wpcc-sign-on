@@ -83,7 +83,7 @@ class WPCC_Sign_On {
 				'client_id'     => $this->client_id,
 				'redirect_uri'  => $this->redirect_url,
 				'client_secret' => $this->client_secret,
-				'code'          => $_GET['code'], // The code from the previous request
+				'code'          => sanitize_text_field( $_GET['code'] ), // The code from the previous request
 				'grant_type'    => 'authorization_code',
 			);
 
