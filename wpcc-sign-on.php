@@ -34,6 +34,7 @@ class WPCC_Sign_On {
 		$this->new_app_url_base  = 'https://developer.wordpress.com/apps/new/';
 		$this->client_id         = get_option( 'wpcc_sign_on_client_id' );
 		$this->client_secret     = get_option( 'wpcc_sign_on_client_secret' );
+		$this->new_user_override     = get_option( 'wpcc_new_user_override' );
 		$this->redirect_url      = wp_login_url();
 
 		add_action( 'admin_init', array( $this, 'admin_init' ) );
@@ -52,6 +53,8 @@ class WPCC_Sign_On {
 		add_settings_field( 'wpcc_sign_on_client_id', '<label for="wpcc_sign_on_client_id">WPCC Client ID</label>' , array( $this, 'wpcc_sign_on_client_id_cb' ) , 'general' );
 		register_setting( 'general', 'wpcc_sign_on_client_secret', 'sanitize_text_field' );
 		add_settings_field( 'wpcc_sign_on_client_secret', '<label for="wpcc_sign_on_client_secret">WPCC Client Secret</label>' , array( $this, 'wpcc_sign_on_client_secret_cb' ) , 'general' );
+		register_setting( 'general', 'wpcc_new_user_override', 'sanitize_text_field' );
+		add_settings_field( 'wpcc_new_user_override', '<label for="wpcc_new_user_override">WPCC Register New User Override</label>' , array( $this, 'wpcc_new_user_override_cb' ) , 'general' );
 	}
 
 	function wpcc_sign_on_client_id_cb() {
@@ -63,6 +66,12 @@ class WPCC_Sign_On {
 		$value = $this->client_secret;
 		echo '<input type="password" id="wpcc_sign_on_client_secret" name="wpcc_sign_on_client_secret" value="' . esc_attr( $value ) . '" />';
 		echo sprintf( '<br /><a href="%1$s">%2$s</a>', esc_url( $this->get_new_app_url() ), __( 'Get new credentials', 'wpcc-sign-on' ) );
+	}
+
+	function wpcc_new_user_override_cb() {
+		$value = $this->new_user_override;
+		echo '<input type="checkbox" id="wpcc_new_user_override" name="wpcc_new_user_override" value="1" ' . checked(1, $value, false) . '  />';
+		echo sprintf( '<br />' );
 	}
 
 	function login_init() {
@@ -107,7 +116,7 @@ class WPCC_Sign_On {
 			);
 
 			$response = wp_remote_get( $this->user_data_url, $args );
-	
+
 			if ( is_wp_error( $response ) ) {
 				wp_die( __( 'Warning! Could not fetch user data!', 'wpcc-sign-on' ) );
 			}
@@ -160,7 +169,7 @@ class WPCC_Sign_On {
 		}
 
 		// If we've still got nothing, create the user.
-		if ( empty( $user ) && get_option( 'users_can_register' ) ) {
+		if ( empty( $user ) && (get_option( 'users_can_register' ) || get_option( 'wpcc_new_user_override' ) ) ) {
 			$username = $user_data->username;
 
 			if ( username_exists( $username ) ) {
@@ -182,7 +191,7 @@ class WPCC_Sign_On {
 
 		if ( $user ) {
 			wp_set_auth_cookie( $user->ID );
-	
+
 			$redirect_to = ! empty( $_REQUEST['redirect_to'] ) ? $_REQUEST['redirect_to'] : site_url();
 			wp_safe_redirect( apply_filters( 'wpcc_sign_on_redirect', $redirect_to ) );
 			exit;
