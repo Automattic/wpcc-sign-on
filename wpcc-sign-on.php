@@ -70,8 +70,7 @@ class WPCC_Sign_On {
 
 	function wpcc_new_user_override_cb() {
 		$value = $this->new_user_override;
-		echo '<input type="checkbox" id="wpcc_new_user_override" name="wpcc_new_user_override" value="1" ' . checked(1, $value, false) . '  />';
-		echo sprintf( '<br />' );
+		echo '<input type="checkbox" id="wpcc_new_user_override" name="wpcc_new_user_override" value="1" ' . checked( 1, $value, false ) . '  />';
 	}
 
 	function login_init() {
@@ -169,7 +168,7 @@ class WPCC_Sign_On {
 		}
 
 		// If we've still got nothing, create the user.
-		if ( empty( $user ) && (get_option( 'users_can_register' ) || get_option( 'wpcc_new_user_override' ) ) ) {
+		if ( empty( $user ) && ( get_option( 'users_can_register' ) || get_option( 'wpcc_new_user_override' ) ) ) {
 			$username = $user_data->username;
 
 			if ( username_exists( $username ) ) {
