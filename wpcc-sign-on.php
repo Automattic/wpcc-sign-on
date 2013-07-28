@@ -50,11 +50,11 @@ class WPCC_Sign_On {
 
 	function admin_init() {
 		register_setting( 'general', 'wpcc_sign_on_client_id', 'intval' );
-		add_settings_field( 'wpcc_sign_on_client_id', '<label for="wpcc_sign_on_client_id">WPCC Client ID</label>' , array( $this, 'wpcc_sign_on_client_id_cb' ) , 'general' );
+		add_settings_field( 'wpcc_sign_on_client_id', sprintf( '<label for="wpcc_sign_on_client_id">%1$s</label>', __( 'WPCC Client ID', 'wpcc-sign-on' ) ), array( $this, 'wpcc_sign_on_client_id_cb' ), 'general' );
 		register_setting( 'general', 'wpcc_sign_on_client_secret', 'sanitize_text_field' );
-		add_settings_field( 'wpcc_sign_on_client_secret', '<label for="wpcc_sign_on_client_secret">WPCC Client Secret</label>' , array( $this, 'wpcc_sign_on_client_secret_cb' ) , 'general' );
+		add_settings_field( 'wpcc_sign_on_client_secret', sprintf( '<label for="wpcc_sign_on_client_secret">%1$s</label>', __( 'WPCC Client Secret', 'wpcc-sign-on' ) ), array( $this, 'wpcc_sign_on_client_secret_cb' ), 'general' );
 		register_setting( 'general', 'wpcc_new_user_override', 'sanitize_text_field' );
-		add_settings_field( 'wpcc_new_user_override', '<label for="wpcc_new_user_override">WPCC Register New User Override</label>' , array( $this, 'wpcc_new_user_override_cb' ) , 'general' );
+		add_settings_field( 'wpcc_new_user_override', sprintf( '<label for="wpcc_new_user_override">%1$s</label>', __( 'WPCC Register New User Override', 'wpcc-sign-on' ) ), array( $this, 'wpcc_new_user_override_cb' ), 'general' );
 	}
 
 	function wpcc_sign_on_client_id_cb() {
