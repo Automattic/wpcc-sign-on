@@ -88,7 +88,7 @@ class WPCC_Sign_On {
 		);
 		add_settings_field(
 			'wpcc_new_user_override',
-			sprintf( '<label for="wpcc_new_user_override">%1$s</label>', __( 'WPCC Register New User Override', 'wpcc-sign-on' ) ),
+			sprintf( '<label for="wpcc_new_user_override">%1$s</label>', __( 'New User Registration', 'wpcc-sign-on' ) ),
 			array( $this, 'wpcc_new_user_override_cb' ),
 			'general',
 			'wpcc'
@@ -138,6 +138,7 @@ class WPCC_Sign_On {
 
 	function wpcc_new_user_override_cb() {
 		echo '<input type="checkbox" id="wpcc_new_user_override" name="wpcc_options[new_user_override]" value="1" ' . checked( 1, $this->new_user_override, false ) . '  />';
+		printf( ' <em>%1$s</em>', __( 'If you do not ordinarily <a href="#users_can_register">let users register</a> above, this will override that and let them register through <abbr title="WordPress.com Connect">WPCC</abbr>.', 'wpcc-sign-on' ) );
 	}
 
 	function login_init() {
