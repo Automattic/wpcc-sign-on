@@ -49,12 +49,28 @@ class WPCC_Sign_On {
 	}
 
 	function admin_init() {
+		// Create the section
+		add_settings_section(
+			'wpcc',
+			sprintf( '<a href="%1$s">%2$s</a>', esc_url( 'http://developer.wordpress.com/docs/wpcc/' ), esc_html__( 'WordPress.com Connect', 'wpcc-sign-on' ) ),
+			array( $this, 'wpcc_settings_section' ),
+			'general'
+		);
+
 		register_setting( 'general', 'wpcc_sign_on_client_id', 'intval' );
 		add_settings_field( 'wpcc_sign_on_client_id', sprintf( '<label for="wpcc_sign_on_client_id">%1$s</label>', __( 'WPCC Client ID', 'wpcc-sign-on' ) ), array( $this, 'wpcc_sign_on_client_id_cb' ), 'general' );
 		register_setting( 'general', 'wpcc_sign_on_client_secret', 'sanitize_text_field' );
 		add_settings_field( 'wpcc_sign_on_client_secret', sprintf( '<label for="wpcc_sign_on_client_secret">%1$s</label>', __( 'WPCC Client Secret', 'wpcc-sign-on' ) ), array( $this, 'wpcc_sign_on_client_secret_cb' ), 'general' );
 		register_setting( 'general', 'wpcc_new_user_override', 'sanitize_text_field' );
 		add_settings_field( 'wpcc_new_user_override', sprintf( '<label for="wpcc_new_user_override">%1$s</label>', __( 'WPCC Register New User Override', 'wpcc-sign-on' ) ), array( $this, 'wpcc_new_user_override_cb' ), 'general' );
+	}
+
+	function wpcc_settings_section() {
+		?>
+
+		<p id="wpcc-sign-on-section"><?php _e( 'Sign-on with your WordPress.com account!', 'jetpack' ); ?></p>
+
+		<?php
 	}
 
 	function wpcc_sign_on_client_id_cb() {
