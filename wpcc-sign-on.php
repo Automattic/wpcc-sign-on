@@ -105,6 +105,11 @@ class WPCC_Sign_On {
 		);
 
 		register_setting( 'general', 'wpcc_options', array( $this, 'sanitize_options' ) );
+
+		if ( true || ! empty( $this->client_id ) ) {
+			add_action( 'show_user_profile', array( $this, 'edit_profile_fields' ) ); // For their own profile
+			add_action( 'edit_user_profile', array( $this, 'edit_profile_fields' ) ); // For folks editing others profiles
+		}
 	}
 
 	function sanitize_options( $options ) {
@@ -154,6 +159,28 @@ class WPCC_Sign_On {
 	function wpcc_match_by_email_cb() {
 		echo '<input type="checkbox" id="wpcc_match_by_email" name="wpcc_options[match_by_email]" value="1" ' . checked( 1, $this->match_by_email, false ) . '  />';
 		printf( ' <em>%1$s</em>', __( 'Should the user be permitted to log on if their local account email address is a match to their verified WordPress.com account email address?', 'wpcc-sign-on' ) );
+	}
+
+	function edit_profile_fields( $user ) {
+		?>
+
+		<h3><?php _e( 'WordPress.com Connect', 'wpcc-sign-on' ); ?></h3>
+
+		<?php if ( $user_data = get_user_meta( $user->ID, 'wpcom_user_data', true ) ) : /* If the user is currently connected... */ ?>
+
+			<pre>
+				<?php var_dump( $user_data ); ?>
+			</pre>
+
+		<?php elseif ( get_current_user_id() == $user->ID ) : ?>
+
+			<p><?php _e( 'This is your profile, and you can connect it if you want to!', 'wpcc-sign-on' ); ?></p>
+
+		<?php else : ?>
+
+			<p><?php _e( 'This profile is not linked to a WordPress.com Profile.', 'wpcc-sign-on' ); ?></p>
+
+		<?php endif;
 	}
 
 	function login_init() {
