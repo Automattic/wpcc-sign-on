@@ -106,7 +106,7 @@ class WPCC_Sign_On {
 
 		register_setting( 'general', 'wpcc_options', array( $this, 'sanitize_options' ) );
 
-		if ( true || ! empty( $this->client_id ) ) {
+		if ( ! empty( $this->client_id ) ) {
 			add_action( 'show_user_profile', array( $this, 'edit_profile_fields' ) ); // For their own profile
 			add_action( 'edit_user_profile', array( $this, 'edit_profile_fields' ) ); // For folks editing others profiles
 		}
