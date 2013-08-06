@@ -59,9 +59,9 @@ class WPCC_Sign_On {
 
 	function default_options() {
 		return array(
-			'client_id'         => null,
-			'client_secret'     => null,
-			'new_user_override' => null,
+			'client_id'         => get_option( 'wpcc_sign_on_client_id' ),
+			'client_secret'     => get_option( 'wpcc_sign_on_client_secret' ),
+			'new_user_override' => get_option( 'wpcc_new_user_override' ),
 			'match_by_email'    => null,
 		);
 	}
