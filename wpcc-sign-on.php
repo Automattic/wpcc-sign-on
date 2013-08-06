@@ -58,19 +58,16 @@ class WPCC_Sign_On {
 	}
 
 	function wpcc_sign_on_client_id_cb() {
-		$value = $this->client_id;
-		echo '<input type="text" id="wpcc_sign_on_client_id" name="wpcc_sign_on_client_id" value="' . esc_attr( $value ) . '" />';
+		echo '<input type="text" id="wpcc_sign_on_client_id" name="wpcc_sign_on_client_id" value="' . esc_attr( $this->client_id ) . '" />';
 	}
 
 	function wpcc_sign_on_client_secret_cb() {
-		$value = $this->client_secret;
-		echo '<input type="password" id="wpcc_sign_on_client_secret" name="wpcc_sign_on_client_secret" value="' . esc_attr( $value ) . '" />';
 		echo sprintf( '<br /><a href="%1$s">%2$s</a>', esc_url( $this->get_new_app_url() ), __( 'Get new credentials', 'wpcc-sign-on' ) );
+		echo '<input type="password" id="wpcc_sign_on_client_secret" name="wpcc_sign_on_client_secret" value="' . esc_attr( $this->client_secret ) . '" />';
 	}
 
 	function wpcc_new_user_override_cb() {
-		$value = $this->new_user_override;
-		echo '<input type="checkbox" id="wpcc_new_user_override" name="wpcc_new_user_override" value="1" ' . checked( 1, $value, false ) . '  />';
+		echo '<input type="checkbox" id="wpcc_new_user_override" name="wpcc_new_user_override" value="1" ' . checked( 1, $this->new_user_override, false ) . '  />';
 	}
 
 	function login_init() {
