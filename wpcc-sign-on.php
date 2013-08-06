@@ -272,6 +272,8 @@ class WPCC_Sign_On {
 		}
 
 		if ( $user ) {
+			// Cache the user's details, so we can present it back to them on their user screen.
+			update_user_meta( $user->ID, 'wpcom_user_data', $user_data );
 			wp_set_auth_cookie( $user->ID );
 
 			$redirect_to = ! empty( $_REQUEST['redirect_to'] ) ? $_REQUEST['redirect_to'] : site_url();
