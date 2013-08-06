@@ -62,8 +62,10 @@ class WPCC_Sign_On {
 	}
 
 	function wpcc_sign_on_client_secret_cb() {
-		echo sprintf( '<br /><a href="%1$s">%2$s</a>', esc_url( $this->get_new_app_url() ), __( 'Get new credentials', 'wpcc-sign-on' ) );
 		echo '<input type="password" id="wpcc_sign_on_client_secret" name="wpcc_sign_on_client_secret" value="' . esc_attr( $this->client_secret ) . '" />';
+		if ( empty( $this->client_id ) || empty( $this->client_secret ) ) {
+			printf( '<h2 style="display:inline; margin-left:1em;"><a href="%1$s">%2$s</a></h2>', esc_url( $this->get_new_app_url() ), __( 'Get client keys &rarr;', 'wpcc-sign-on' ) );
+		}
 	}
 
 	function wpcc_new_user_override_cb() {
