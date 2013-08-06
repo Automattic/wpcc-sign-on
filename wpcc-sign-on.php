@@ -106,11 +106,11 @@ class WPCC_Sign_On {
 			$options['client_secret'] = sanitize_text_field( $options['client_secret'] );
 		}
 
-		if ( ! empty( $options['new_user_override'] ) ) {
+		if ( isset( $options['new_user_override'] ) ) {
 			$options['new_user_override'] = intval( $options['new_user_override'] );
 		}
 
-		if ( ! empty( $options['match_by_email'] ) ) {
+		if ( isset( $options['match_by_email'] ) ) {
 			$options['match_by_email'] = intval( $options['match_by_email'] );
 		}
 
