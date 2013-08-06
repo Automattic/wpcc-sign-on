@@ -35,9 +35,9 @@ class WPCC_Sign_On {
 		$this->user_data_url     = 'https://public-api.wordpress.com/rest/v1/me/';
 		$this->new_app_url_base  = 'https://developer.wordpress.com/apps/new/';
 		$this->options           = $this->fetch_options();
-		$this->client_id         = $this->options->client_id;
-		$this->client_secret     = $this->options->client_secret;
-		$this->new_user_override = $this->options->new_user_override;
+		$this->client_id         = $this->options['client_id'];
+		$this->client_secret     = $this->options['client_secret'];
+		$this->new_user_override = $this->options['new_user_override'];
 		$this->redirect_url      = wp_login_url();
 
 		add_action( 'admin_init', array( $this, 'admin_init' ) );
