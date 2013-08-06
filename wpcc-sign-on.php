@@ -19,6 +19,7 @@ class WPCC_Sign_On {
 		$client_id,         // Option.
 		$client_secret,     // Option.
 		$new_user_override, // Option.
+		$match_by_email,    // Option.
 		$redirect_url,
 		$secret,
 		$user_data;
@@ -38,6 +39,7 @@ class WPCC_Sign_On {
 		$this->client_id         = $this->options['client_id'];
 		$this->client_secret     = $this->options['client_secret'];
 		$this->new_user_override = $this->options['new_user_override'];
+		$this->match_by_email    = $this->options['match_by_email'];
 		$this->redirect_url      = wp_login_url();
 
 		add_action( 'admin_init', array( $this, 'admin_init' ) );
@@ -60,6 +62,7 @@ class WPCC_Sign_On {
 			'client_id'         => null,
 			'client_secret'     => null,
 			'new_user_override' => null,
+			'match_by_email'    => null,
 		);
 	}
 
@@ -90,6 +93,13 @@ class WPCC_Sign_On {
 			'wpcc_new_user_override',
 			sprintf( '<label for="wpcc_new_user_override">%1$s</label>', __( 'New User Registration', 'wpcc-sign-on' ) ),
 			array( $this, 'wpcc_new_user_override_cb' ),
+			'general',
+			'wpcc'
+		);
+		add_settings_field(
+			'wpcc_match_by_email',
+			sprintf( '<label for="wpcc_match_by_email">%1$s</label>', __( 'Match By Email', 'wpcc-sign-on' ) ),
+			array( $this, 'wpcc_match_by_email_cb' ),
 			'general',
 			'wpcc'
 		);
@@ -139,6 +149,11 @@ class WPCC_Sign_On {
 	function wpcc_new_user_override_cb() {
 		echo '<input type="checkbox" id="wpcc_new_user_override" name="wpcc_options[new_user_override]" value="1" ' . checked( 1, $this->new_user_override, false ) . '  />';
 		printf( ' <em>%1$s</em>', __( 'If you do not ordinarily <a href="#users_can_register">let users register</a> above, this will override that and let them register through <abbr title="WordPress.com Connect">WPCC</abbr>.', 'wpcc-sign-on' ) );
+	}
+
+	function wpcc_match_by_email_cb() {
+		echo '<input type="checkbox" id="wpcc_match_by_email" name="wpcc_options[match_by_email]" value="1" ' . checked( 1, $this->match_by_email, false ) . '  />';
+		printf( ' <em>%1$s</em>', __( 'Should the user be permitted to log on if their local account email address is a match to their verified WordPress.com account email address?', 'wpcc-sign-on' ) );
 	}
 
 	function login_init() {
@@ -228,7 +243,7 @@ class WPCC_Sign_On {
 		$user = $this->get_user_by_wpcom_id( $user_data->ID );
 
 		// If we don't have one by wpcom_user_id, try by the email?
-		if ( empty( $user ) ) {
+		if ( empty( $user ) && $this->match_by_email ) {
 			$user = get_user_by( 'email', $user_data->email );
 			if ( $user ) {
 				update_user_meta( $user->ID, 'wpcom_user_id', $user_data->ID );
