@@ -120,7 +120,7 @@ class WPCC_Sign_On {
 	function wpcc_settings_section() {
 		?>
 
-		<p id="wpcc-sign-on-section"><?php _e( 'Sign-on with your WordPress.com account!', 'jetpack' ); ?></p>
+		<p id="wpcc-sign-on-section"><?php _e( 'Sign-on with your WordPress.com account!', 'wpcc-sign-on' ); ?></p>
 
 		<?php
 	}
