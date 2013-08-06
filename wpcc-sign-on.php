@@ -15,6 +15,7 @@ class WPCC_Sign_On {
 		$authenticate_url,  // Fixed URL.
 		$user_data_url,     // Fixed URL.
 		$new_app_url_base,  // Fixed URL.
+		$options,           // Options Array.
 		$client_id,         // Option.
 		$client_secret,     // Option.
 		$new_user_override, // Option.
@@ -33,9 +34,10 @@ class WPCC_Sign_On {
 		$this->authenticate_url  = 'https://public-api.wordpress.com/oauth2/authenticate';
 		$this->user_data_url     = 'https://public-api.wordpress.com/rest/v1/me/';
 		$this->new_app_url_base  = 'https://developer.wordpress.com/apps/new/';
-		$this->client_id         = get_option( 'wpcc_sign_on_client_id' );
-		$this->client_secret     = get_option( 'wpcc_sign_on_client_secret' );
-		$this->new_user_override     = get_option( 'wpcc_new_user_override' );
+		$this->options           = $this->fetch_options();
+		$this->client_id         = $this->options->client_id;
+		$this->client_secret     = $this->options->client_secret;
+		$this->new_user_override = $this->options->new_user_override;
 		$this->redirect_url      = wp_login_url();
 
 		add_action( 'admin_init', array( $this, 'admin_init' ) );
@@ -47,6 +49,18 @@ class WPCC_Sign_On {
 		add_action( 'login_init',            array( $this, 'login_init' )            );
 		add_action( 'login_enqueue_scripts', array( $this, 'login_enqueue_scripts' ) );
 		add_action( 'login_form',            array( $this, 'login_form' )            );
+	}
+
+	function fetch_options() {
+		return wp_parse_args( get_option( 'wpcc_options' ), $this->default_options() );
+	}
+
+	function default_options() {
+		return array(
+			'client_id'         => null,
+			'client_secret'     => null,
+			'new_user_override' => null,
+		);
 	}
 
 	function admin_init() {
@@ -80,9 +94,27 @@ class WPCC_Sign_On {
 			'wpcc'
 		);
 
-		register_setting( 'general', 'wpcc_sign_on_client_id', 'intval' );
-		register_setting( 'general', 'wpcc_sign_on_client_secret', 'sanitize_text_field' );
-		register_setting( 'general', 'wpcc_new_user_override', 'sanitize_text_field' );
+		register_setting( 'general', 'wpcc_options', array( $this, 'sanitize_options' ) );
+	}
+
+	function sanitize_options( $options ) {
+		if ( ! empty( $options['client_id'] ) ) {
+			$options['client_id'] = intval( $options['client_id'] );
+		}
+
+		if ( ! empty( $options['client_secret'] ) ) {
+			$options['client_secret'] = sanitize_text_field( $options['client_secret'] );
+		}
+
+		if ( ! empty( $options['new_user_override'] ) ) {
+			$options['new_user_override'] = intval( $options['new_user_override'] );
+		}
+
+		if ( ! empty( $options['match_by_email'] ) ) {
+			$options['match_by_email'] = intval( $options['match_by_email'] );
+		}
+
+		return $options;
 	}
 
 	function wpcc_settings_section() {
@@ -94,18 +126,18 @@ class WPCC_Sign_On {
 	}
 
 	function wpcc_sign_on_client_id_cb() {
-		echo '<input type="text" id="wpcc_sign_on_client_id" name="wpcc_sign_on_client_id" value="' . esc_attr( $this->client_id ) . '" />';
+		echo '<input type="text" id="wpcc_sign_on_client_id" name="wpcc_options[client_id]" value="' . esc_attr( $this->client_id ) . '" />';
 	}
 
 	function wpcc_sign_on_client_secret_cb() {
-		echo '<input type="password" id="wpcc_sign_on_client_secret" name="wpcc_sign_on_client_secret" value="' . esc_attr( $this->client_secret ) . '" />';
+		echo '<input type="password" id="wpcc_sign_on_client_secret" name="wpcc_options[client_secret]" value="' . esc_attr( $this->client_secret ) . '" />';
 		if ( empty( $this->client_id ) || empty( $this->client_secret ) ) {
 			printf( '<h2 style="display:inline; margin-left:1em;"><a href="%1$s">%2$s</a></h2>', esc_url( $this->get_new_app_url() ), __( 'Get client keys &rarr;', 'wpcc-sign-on' ) );
 		}
 	}
 
 	function wpcc_new_user_override_cb() {
-		echo '<input type="checkbox" id="wpcc_new_user_override" name="wpcc_new_user_override" value="1" ' . checked( 1, $this->new_user_override, false ) . '  />';
+		echo '<input type="checkbox" id="wpcc_new_user_override" name="wpcc_options[new_user_override]" value="1" ' . checked( 1, $this->new_user_override, false ) . '  />';
 	}
 
 	function login_init() {
