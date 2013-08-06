@@ -126,11 +126,11 @@ class WPCC_Sign_On {
 	}
 
 	function wpcc_sign_on_client_id_cb() {
-		echo '<input type="text" id="wpcc_sign_on_client_id" name="wpcc_options[client_id]" value="' . esc_attr( $this->client_id ) . '" />';
+		echo '<input autocomplete="off" type="text" id="wpcc_sign_on_client_id" name="wpcc_options[client_id]" value="' . esc_attr( $this->client_id ) . '" />';
 	}
 
 	function wpcc_sign_on_client_secret_cb() {
-		echo '<input type="password" id="wpcc_sign_on_client_secret" name="wpcc_options[client_secret]" value="' . esc_attr( $this->client_secret ) . '" />';
+		echo '<input autocomplete="off" type="text" id="wpcc_sign_on_client_secret" name="wpcc_options[client_secret]" value="' . esc_attr( $this->client_secret ) . '" />';
 		if ( empty( $this->client_id ) || empty( $this->client_secret ) ) {
 			printf( '<h2 style="display:inline; margin-left:1em;"><a href="%1$s">%2$s</a></h2>', esc_url( $this->get_new_app_url() ), __( 'Get client keys &rarr;', 'wpcc-sign-on' ) );
 		}
