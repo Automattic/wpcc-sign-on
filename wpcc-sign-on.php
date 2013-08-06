@@ -11,12 +11,12 @@
 class WPCC_Sign_On {
 	static $instance = null;
 
-	var $request_token_url,
-		$authenticate_url,
-		$user_data_url,
-		$new_app_url_base,
-		$client_id,
-		$client_secret,
+	var $request_token_url, // Fixed URL.
+		$authenticate_url,  // Fixed URL.
+		$user_data_url,     // Fixed URL.
+		$new_app_url_base,  // Fixed URL.
+		$client_id,         // Option.
+		$client_secret,     // Option.
 		$redirect_url,
 		$secret,
 		$user_data;
