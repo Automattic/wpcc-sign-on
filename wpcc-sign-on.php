@@ -17,6 +17,7 @@ class WPCC_Sign_On {
 		$new_app_url_base,  // Fixed URL.
 		$client_id,         // Option.
 		$client_secret,     // Option.
+		$new_user_override, // Option.
 		$redirect_url,
 		$secret,
 		$user_data;
@@ -202,7 +203,7 @@ class WPCC_Sign_On {
 		}
 
 		// If we've still got nothing, create the user.
-		if ( empty( $user ) && ( get_option( 'users_can_register' ) || get_option( 'wpcc_new_user_override' ) ) ) {
+		if ( empty( $user ) && ( get_option( 'users_can_register' ) || $this->new_user_override ) ) {
 			$username = $user_data->username;
 
 			if ( username_exists( $username ) ) {
