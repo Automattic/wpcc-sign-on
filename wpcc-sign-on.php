@@ -184,6 +184,48 @@ class WPCC_Sign_On {
 		<?php endif;
 	}
 
+	function verify_connection() {
+		if ( empty( $_GET['state'] ) ) {
+			wp_die( __( 'Warning! State variable missing after authentication.', 'wpcc-sign-on' ) );
+		}
+
+		if ( $_GET['state'] != $this->wpcc_state ) {
+			wp_die( __( 'Warning! State mismatch. Authentication attempt may have been compromised.', 'wpcc-sign-on' ) );
+		}
+
+		$args = array(
+			'client_id'     => $this->client_id,
+			'redirect_uri'  => $this->redirect_url,
+			'client_secret' => $this->client_secret,
+			'code'          => sanitize_text_field( $_GET['code'] ), // The code from the previous request
+			'grant_type'    => 'authorization_code',
+		);
+
+		$response = wp_remote_post( $this->request_token_url, array( 'body' => $args ) );
+
+		if ( is_wp_error( $response ) ) {
+			wp_die( __( 'Warning! Could not confirm request token url!', 'wpcc-sign-on' ) );
+		}
+
+		$this->secret = json_decode( wp_remote_retrieve_body( $response ) );
+
+		$args = array(
+			'headers' => array(
+				'Authorization' => sprintf( 'Bearer %s', $this->secret->access_token ),
+			),
+		);
+
+		$response = wp_remote_get( $this->user_data_url, $args );
+
+		if ( is_wp_error( $response ) ) {
+			wp_die( __( 'Warning! Could not fetch user data!', 'wpcc-sign-on' ) );
+		}
+
+		$this->user_data = json_decode( wp_remote_retrieve_body( $response ) );
+
+		return $this->user_data;
+	}
+
 	function login_init() {
 		// Set the wpcc_state
 		$this->wpcc_state = md5( mt_rand() );
@@ -195,45 +237,10 @@ class WPCC_Sign_On {
 
 		// If they just got forwarded back ...
 		if ( isset( $_GET['code'] ) ) {
-			if ( empty( $_GET['state'] ) ) {
-				wp_die( __( 'Warning! State variable missing after authentication.', 'wpcc-sign-on' ) );
-			}
 
-			if ( $_GET['state'] != $this->wpcc_state ) {
-				wp_die( __( 'Warning! State mismatch. Authentication attempt may have been compromised.', 'wpcc-sign-on' ) );
-			}
+			$user_data = $this->verify_connection();
 
-			$args = array(
-				'client_id'     => $this->client_id,
-				'redirect_uri'  => $this->redirect_url,
-				'client_secret' => $this->client_secret,
-				'code'          => sanitize_text_field( $_GET['code'] ), // The code from the previous request
-				'grant_type'    => 'authorization_code',
-			);
-
-			$response = wp_remote_post( $this->request_token_url, array( 'body' => $args ) );
-
-			if ( is_wp_error( $response ) ) {
-				wp_die( __( 'Warning! Could not confirm request token url!', 'wpcc-sign-on' ) );
-			}
-
-			$this->secret = json_decode( wp_remote_retrieve_body( $response ) );
-
-			$args = array(
-				'headers' => array(
-					'Authorization' => sprintf( 'Bearer %s', $this->secret->access_token ),
-				),
-			);
-
-			$response = wp_remote_get( $this->user_data_url, $args );
-
-			if ( is_wp_error( $response ) ) {
-				wp_die( __( 'Warning! Could not fetch user data!', 'wpcc-sign-on' ) );
-			}
-
-			$this->user_data = json_decode( wp_remote_retrieve_body( $response ) );
-
-			$this->auth_user( $this->user_data );
+			$this->auth_user( $user_data );
 		}
 	}
 
