@@ -179,7 +179,7 @@ class WPCC_Sign_On {
 
 		<?php else : ?>
 
-			<p><?php _e( 'This profile is not linked to a WordPress.com Profile.', 'wpcc-sign-on' ); ?></p>
+			<p><?php _e( 'This profile is not currently linked to a WordPress.com Profile.', 'wpcc-sign-on' ); ?></p>
 
 		<?php endif;
 	}
