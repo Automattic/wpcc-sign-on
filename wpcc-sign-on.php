@@ -115,8 +115,6 @@ class WPCC_Sign_On {
 		if ( $user_ID = get_current_user_id() ) {
 			$this->wpcc_state = "localuser{$user_ID}";
 		}
-
-		add_action( 'load-profile.php', array( $this, 'load_profile_php' ) );
 	}
 
 	function sanitize_options( $options ) {
@@ -173,7 +171,7 @@ class WPCC_Sign_On {
 
 		<h3><?php _e( 'WordPress.com Connect', 'wpcc-sign-on' ); ?></h3>
 
-		<?php if ( $user_data = get_user_meta( $user->ID, 'wpcom_user_data', true ) ) : /* If the user is currently connected... */ ?>
+		<?php if ( ( $user_data = get_user_meta( $user->ID, 'wpcom_user_data', true ) ) && ! empty( $user_data->ID ) ) : /* If the user is currently connected... */ ?>
 
 			<pre>
 				<?php var_dump( $user_data ); ?>
@@ -181,22 +179,13 @@ class WPCC_Sign_On {
 
 		<?php elseif ( get_current_user_id() == $user->ID ) : ?>
 
-			<?php echo $this->button( array( 'redirect_uri' => admin_url( 'profile.php' ) ) ); ?>
+			<?php echo $this->button( array( 'redirect_uri' => add_query_arg( 'for', 'profile', $this->redirect_url ) ) ); ?>
 
 		<?php else : ?>
 
 			<p><?php _e( 'This profile is not currently linked to a WordPress.com Profile.', 'wpcc-sign-on' ); ?></p>
 
 		<?php endif;
-	}
-
-	function load_profile_php() {
-		if ( isset( $_GET['code'] ) ) {
-			$user_data = $this->verify_connection();
-
-			update_user_meta( get_current_user_id(), 'wpcom_user_id', $user_data->ID );
-			update_user_meta( get_current_user_id(), 'wpcom_user_data', $user_data );
-		}
 	}
 
 	function verify_connection() {
@@ -248,6 +237,20 @@ class WPCC_Sign_On {
 			$this->wpcc_state = $_COOKIE['wpcc_state'];
 		} else {
 			setcookie( 'wpcc_state', $this->wpcc_state );
+		}
+
+		if ( isset( $_GET['for'] ) && ( 'profile' == $_GET['for'] ) ) {
+			$user_ID = get_current_user_id();
+
+			$this->redirect_url = add_query_arg( 'for', 'profile', $this->redirect_url );
+			$this->wpcc_state = "localuser{$user_ID}";
+			$user_data = $this->verify_connection();
+
+			update_user_meta( get_current_user_id(), 'wpcom_user_id', $user_data->ID );
+			update_user_meta( get_current_user_id(), 'wpcom_user_data', $user_data );
+	
+			wp_safe_redirect( admin_url( 'profile.php' ) );
+			exit;
 		}
 
 		// If they just got forwarded back ...
