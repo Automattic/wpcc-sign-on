@@ -173,9 +173,30 @@ class WPCC_Sign_On {
 
 		<?php if ( ( $user_data = get_user_meta( $user->ID, 'wpcom_user_data', true ) ) && ! empty( $user_data->ID ) ) : /* If the user is currently connected... */ ?>
 
-			<pre>
-				<?php var_dump( $user_data ); ?>
-			</pre>
+			<div class="profile-card">
+				<img src="<?php echo esc_url( $user_data->avatar_URL ); ?>" height="96" width="96" />
+				<p><?php printf( __( 'Currently connected as <a href="%1$s">%2$s</a>', 'wpcc-sign-on' ), esc_url( $user_data->profile_URL ), esc_html( $user_data->username ) ); ?></p>
+				<a class="button button-primary" href="#"><?php _e( 'Unlink This Account', 'wpcc-sign-on' ); ?></a>
+			</div>
+			<style>
+			.profile-card {
+				padding: 10px;
+				border-radius: 5px;
+				border: 1px solid rgba( 0, 0, 0, 0.9 );
+				background: rgba( 0, 0, 0, 0.75 );
+				overflow: hidden;
+				display: inline-block;
+			}
+			.profile-card img {
+				border: 1px solid rgba( 0, 0, 0, 0.9 );
+				float: left;
+				margin-right: 1em;
+			}
+			.profile-card p {
+				color: #fff;
+				margin: 0 0 0.25em;
+			}
+			</style>
 
 		<?php elseif ( get_current_user_id() == $user->ID ) : ?>
 
