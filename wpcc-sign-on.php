@@ -167,6 +167,10 @@ class WPCC_Sign_On {
 	}
 
 	function edit_profile_fields( $user ) {
+		if ( isset( $_GET['wpcc'] ) && 'purge' == $_GET['wpcc'] ) {
+			delete_user_meta( $user->ID, 'wpcom_user_id' );
+			delete_user_meta( $user->ID, 'wpcom_user_data' );
+		}
 		?>
 
 		<h3><?php _e( 'WordPress.com Connect', 'wpcc-sign-on' ); ?></h3>
@@ -176,7 +180,7 @@ class WPCC_Sign_On {
 			<div class="profile-card">
 				<img src="<?php echo esc_url( $user_data->avatar_URL ); ?>" height="96" width="96" />
 				<p><?php printf( __( 'Currently connected as <a href="%1$s">%2$s</a>', 'wpcc-sign-on' ), esc_url( $user_data->profile_URL ), esc_html( $user_data->username ) ); ?></p>
-				<a class="button button-primary" href="#"><?php _e( 'Unlink This Account', 'wpcc-sign-on' ); ?></a>
+				<a class="button button-primary" href="<?php echo esc_url( add_query_arg( 'wpcc', 'purge' ) ); ?>"><?php _e( 'Unlink This Account', 'wpcc-sign-on' ); ?></a>
 			</div>
 			<style>
 			.profile-card {
