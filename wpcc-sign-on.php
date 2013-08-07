@@ -21,6 +21,7 @@ class WPCC_Sign_On {
 		$new_user_override, // Option.
 		$match_by_email,    // Option.
 		$redirect_url,
+		$wpcc_state,
 		$secret,
 		$user_data;
 
