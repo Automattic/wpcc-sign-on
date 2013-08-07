@@ -175,7 +175,7 @@ class WPCC_Sign_On {
 
 		<?php elseif ( get_current_user_id() == $user->ID ) : ?>
 
-			<p><?php _e( 'This is your profile, and you can connect it if you want to!', 'wpcc-sign-on' ); ?></p>
+			<?php $this->button( array( 'redirect_uri' => admin_url( 'profile.php' ) ) ); ?>
 
 		<?php else : ?>
 
@@ -249,13 +249,15 @@ class WPCC_Sign_On {
 		echo $this->button();
 	}
 
-	function button() {
-		$args = array(
+	function button( $args = array() ) {
+		$defaults = array(
 			'response_type' => 'code',
 			'client_id'     => $this->client_id,
 			'state'         => $this->wpcc_state,
 			'redirect_uri'  => $this->redirect_url,
 		);
+
+		$args = wp_parse_args( $args, $defaults );
 
 		$url = add_query_arg( $args, $this->authenticate_url );
 
