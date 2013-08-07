@@ -111,6 +111,12 @@ class WPCC_Sign_On {
 			add_action( 'show_user_profile', array( $this, 'edit_profile_fields' ) ); // For their own profile
 			add_action( 'edit_user_profile', array( $this, 'edit_profile_fields' ) ); // For folks editing others profiles
 		}
+
+		if ( $user_ID = get_current_user_id() ) {
+			$this->wpcc_state = "localuser{$user_ID}";
+		}
+
+		add_action( 'load-profile.php', array( $this, 'load_profile_php' ) );
 	}
 
 	function sanitize_options( $options ) {
@@ -182,6 +188,15 @@ class WPCC_Sign_On {
 			<p><?php _e( 'This profile is not currently linked to a WordPress.com Profile.', 'wpcc-sign-on' ); ?></p>
 
 		<?php endif;
+	}
+
+	function load_profile_php() {
+		if ( isset( $_GET['code'] ) ) {
+			$user_data = $this->verify_connection();
+
+			update_user_meta( get_current_user_id(), 'wpcom_user_id', $user_data->ID );
+			update_user_meta( get_current_user_id(), 'wpcom_user_data', $user_data );
+		}
 	}
 
 	function verify_connection() {
