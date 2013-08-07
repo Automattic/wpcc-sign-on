@@ -181,7 +181,7 @@ class WPCC_Sign_On {
 
 		<?php elseif ( get_current_user_id() == $user->ID ) : ?>
 
-			<?php $this->button( array( 'redirect_uri' => admin_url( 'profile.php' ) ) ); ?>
+			<?php echo $this->button( array( 'redirect_uri' => admin_url( 'profile.php' ) ) ); ?>
 
 		<?php else : ?>
 
