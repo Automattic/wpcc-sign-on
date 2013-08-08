@@ -338,7 +338,7 @@ class WPCC_Sign_On {
 
 		$args = wp_parse_args( $args, $defaults );
 
-		if ( isset( $_REQUEST['redirect_to'] ) ) {
+		if ( ! empty( $_REQUEST['redirect_to'] ) ) {
 			$args['redirect_uri'] = add_query_arg( 'redirect_to', $_REQUEST['redirect_to'], $args['redirect_uri'] );
 		}
 
