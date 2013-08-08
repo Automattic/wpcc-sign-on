@@ -1,11 +1,11 @@
 <?php
 /**
  * Plugin Name: WPCC Sign On
- * Plugin URI: http://wordpress.org/plugins/wpcc-sign-on/
+ * Plugin URI: https://github.com/Automattic/wpcc-sign-on
  * Description: A single-sign-on via WordPress.com for your WordPress.org site!
- * Author: George Stephanis
+ * Author: Automatticians
  * Version: 1.0
- * Author URI: http://stephanis.info/
+ * Author URI: http://automattic.com/
  */
 
 class WPCC_Sign_On {
