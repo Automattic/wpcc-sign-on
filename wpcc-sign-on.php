@@ -174,6 +174,7 @@ class WPCC_Sign_On {
 		?>
 
 		<h3><?php _e( 'WordPress.com Connect', 'wpcc-sign-on' ); ?></h3>
+		<p><?php _e( 'Connecting with WordPress.com Connect enables you to log on via your WordPress.com account.', 'wpcc-sign-on' ); ?></p>
 
 		<?php if ( ( $user_data = get_user_meta( $user->ID, 'wpcom_user_data', true ) ) && ! empty( $user_data->ID ) ) : /* If the user is currently connected... */ ?>
 
