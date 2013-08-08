@@ -385,8 +385,9 @@ class WPCC_Sign_On {
 			update_user_meta( $user->ID, 'wpcom_user_data', $user_data );
 			wp_set_auth_cookie( $user->ID );
 
-			$redirect_to = ! empty( $_REQUEST['redirect_to'] ) ? $_REQUEST['redirect_to'] : site_url();
-			wp_safe_redirect( apply_filters( 'wpcc_sign_on_redirect', $redirect_to ) );
+			$_request_redirect_to = isset( $_REQUEST['redirect_to'] ) ? $_REQUEST['redirect_to'] : '';
+			$redirect_to = user_can( $user, 'edit_posts' ) ? admin_url() : home_url();
+			wp_safe_redirect( apply_filters( 'login_redirect', $redirect_to, $_request_redirect_to, $user ) );
 			exit;
 		}
 
