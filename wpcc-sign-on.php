@@ -193,22 +193,33 @@ class WPCC_Sign_On {
 			</table>
 
 			<style>
-			.profile-card {
-				padding: 10px;
-				border-radius: 5px;
-				border: 1px solid rgba( 0, 0, 0, 0.9 );
-				background: rgba( 0, 0, 0, 0.75 );
-				overflow: hidden;
-				display: inline-block;
+			.wpcc-form-table td {
+				padding-left: 0;
 			}
-			.profile-card img {
-				border: 1px solid rgba( 0, 0, 0, 0.9 );
+
+			.wpcc-form-table .profile-card {
+				padding: 10px;
+				background: #fff;
+				overflow: hidden;
+				max-width: 400px;
+				box-shadow: 0 2px 5px rgba( 0, 0, 0, 0.4 );
+				margin-bottom: 1em;
+			}
+
+			.wpcc-form-table .profile-card img {
 				float: left;
 				margin-right: 1em;
 			}
-			.profile-card p {
-				color: #fff;
-				margin: 0 0 0.25em;
+
+			.wpcc-form-table .profile-card .connected {
+				float: right;
+				margin-right: 0.5em;
+				color: #0a0;
+			}
+
+			.wpcc-form-table .profile-card p {
+				margin-top: 0.7em;
+				font-size: 1.2em;
 			}
 			</style>
 
