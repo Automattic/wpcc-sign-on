@@ -338,6 +338,10 @@ class WPCC_Sign_On {
 
 		$args = wp_parse_args( $args, $defaults );
 
+		if ( isset( $_REQUEST['redirect_to'] ) ) {
+			$args['redirect_uri'] = add_query_arg( 'redirect_to', $_REQUEST['redirect_to'], $args['redirect_uri'] );
+		}
+
 		$url = add_query_arg( $args, $this->authenticate_url );
 
 		return sprintf( '<a id="wpcc-sign-on" href="%1$s"><img src="//s0.wp.com/i/wpcc-button.png" width="231" /></a>', esc_url( $url ) );
