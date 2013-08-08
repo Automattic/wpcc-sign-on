@@ -37,7 +37,7 @@ class WPCC_Sign_On {
 		$this->authenticate_url  = 'https://public-api.wordpress.com/oauth2/authenticate';
 		$this->user_data_url     = 'https://public-api.wordpress.com/rest/v1/me/';
 		$this->new_app_url_base  = 'https://developer.wordpress.com/apps/new/';
-		$this->options_prefix    = class_exists( 'Jetpack_Options' ) ? 'jetpack_' : '';
+		$this->options_prefix    = $this->in_jetpack() ? 'jetpack_' : '';
 		$this->options           = $this->fetch_options();
 		$this->client_id         = $this->options['client_id'];
 		$this->client_secret     = $this->options['client_secret'];
@@ -56,8 +56,12 @@ class WPCC_Sign_On {
 		add_action( 'login_form',            array( $this, 'login_form' )            );
 	}
 
+	function in_jetpack() {
+		return '/modules/wpcc' == substr( dirname( __FILE__ ), ( 0 - strlen( '/modules/wpcc' ) ) );
+	}
+
 	function fetch_options() {
-		$options = class_exists( 'Jetpack_Options' ) ? Jetpack_Options::get_option( 'wpcc_options' ) : get_option( 'wpcc_options' );
+		$options = $this->in_jetpack() ? Jetpack_Options::get_option( 'wpcc_options' ) : get_option( 'wpcc_options' );
 		return wp_parse_args( $options, $this->default_options() );
 	}
 
