@@ -71,6 +71,7 @@ class WPCC_Sign_On {
 			'client_secret'     => null,
 			'new_user_override' => null,
 			'match_by_email'    => null,
+			'redirect_url'	    => null,
 		);
 	}
 
@@ -108,6 +109,14 @@ class WPCC_Sign_On {
 			'wpcc_match_by_email',
 			sprintf( '<label for="wpcc_match_by_email">%1$s</label>', __( 'Match By Email', 'jetpack' ) ),
 			array( $this, 'wpcc_match_by_email_cb' ),
+			'general',
+			'wpcc'
+		);
+
+		add_settings_field(
+			'wpcc_redirect_url',
+			sprintf( '<label for="wpcc_redirect_url">%1$s</label>', __( 'Redirct URL', 'jetpack' ) ),
+			array( $this, 'wpcc_redirect_url_cb' ),
 			'general',
 			'wpcc'
 		);
@@ -171,6 +180,15 @@ class WPCC_Sign_On {
 	function wpcc_match_by_email_cb() {
 		echo '<input type="checkbox" id="wpcc_match_by_email" name="' . $this->options_prefix . 'wpcc_options[match_by_email]" value="1" ' . checked( 1, $this->match_by_email, false ) . '  />';
 		printf( ' <em>%1$s</em>', __( 'Should the user be permitted to log on if their local account email address is a match to their verified WordPress.com account email address?', 'jetpack' ) );
+	}
+
+	function wpcc_redirect_url_cb() {
+		$url = $this->redirect_url;
+		if( isset( $this->options['redirect_url'] ) ) {
+			$url = $this->options['redirect_url'];
+		}
+		echo '<input class="regular-text code" autocomplete="off" type="text" id="wpcc_redirect_url" name="' . $this->options_prefix . 'wpcc_options[redirect_url]" value="' . $url . '" />';
+		printf( ' <br /><em>%1$s</em>', __( 'URL user will be returned to after authentication. Leave blank for home page (Default).', 'jetpack' ) );
 	}
 
 	function edit_profile_fields( $user ) {
@@ -302,7 +320,7 @@ class WPCC_Sign_On {
 
 			update_user_meta( get_current_user_id(), 'wpcom_user_id', $user_data->ID );
 			update_user_meta( get_current_user_id(), 'wpcom_user_data', $user_data );
-	
+
 			wp_safe_redirect( admin_url( 'profile.php' ) );
 			exit;
 		}
@@ -385,7 +403,13 @@ class WPCC_Sign_On {
 			update_user_meta( $user->ID, 'wpcom_user_data', $user_data );
 			wp_set_auth_cookie( $user->ID );
 
-			$redirect_to = ! empty( $_REQUEST['redirect_to'] ) ? $_REQUEST['redirect_to'] : site_url();
+			$redirect_to = home_url();
+			if ( ! empty( $_REQUEST['redirect_to'] ) ) {
+				$redirect_to = $_REQUEST['redirect_to'];
+			} else if( ! empty( $this->options['redirect_url'] ) ) {
+				$redirect_to = $this->options['redirect_url'];
+			}
+
 			wp_safe_redirect( apply_filters( 'wpcc_sign_on_redirect', $redirect_to ) );
 			exit;
 		}
