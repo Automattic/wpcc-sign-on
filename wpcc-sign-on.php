@@ -177,11 +177,21 @@ class WPCC_Sign_On {
 
 		<?php if ( ( $user_data = get_user_meta( $user->ID, 'wpcom_user_data', true ) ) && ! empty( $user_data->ID ) ) : /* If the user is currently connected... */ ?>
 
-			<div class="profile-card">
-				<img src="<?php echo esc_url( $user_data->avatar_URL ); ?>" height="96" width="96" />
-				<p><?php printf( __( 'Currently connected as <a href="%1$s">%2$s</a>', 'wpcc-sign-on' ), esc_url( $user_data->profile_URL ), esc_html( $user_data->username ) ); ?></p>
-				<a class="button button-primary" href="<?php echo esc_url( add_query_arg( 'wpcc', 'purge' ) ); ?>"><?php _e( 'Unlink This Account', 'wpcc-sign-on' ); ?></a>
-			</div>
+			<table class="form-table wpcc-form-table">
+				<tbody>
+					<tr>
+						<td>
+							<div class="profile-card">
+								<img src="<?php echo esc_url( $user_data->avatar_URL ); ?>" height="48" width="48" />
+								<p class="connected"><strong><?php _e( 'Connected', 'wpcc-sign-on' ); ?></strong></p>
+								<p><?php echo esc_html( $user_data->username ); ?></p>
+							</div>
+							<p><a class="button button-secondary" href="<?php echo esc_url( add_query_arg( 'wpcc', 'purge' ) ); ?>"><?php _e( 'Unlink This Account', 'wpcc-sign-on' ); ?></a></p>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+
 			<style>
 			.profile-card {
 				padding: 10px;
