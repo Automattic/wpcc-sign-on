@@ -302,7 +302,7 @@ class WPCC_Sign_On {
 
 			update_user_meta( get_current_user_id(), 'wpcom_user_id', $user_data->ID );
 			update_user_meta( get_current_user_id(), 'wpcom_user_data', $user_data );
-	
+
 			wp_safe_redirect( admin_url( 'profile.php' ) );
 			exit;
 		}
