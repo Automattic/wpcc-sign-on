@@ -377,7 +377,7 @@ class WPCC_Sign_On {
 			if ( username_exists( $username ) )
 				$username .= '_' . mt_rand();
 
-			$password = wp_generate_password( 12, true );
+			$password = wp_generate_password( 20 );
 			$user_id  = wp_create_user( $username, $password, $user_data->email );
 			$user     = get_userdata( $user_id );
 
