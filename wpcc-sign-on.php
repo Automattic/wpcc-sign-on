@@ -154,6 +154,9 @@ class WPCC_Sign_On {
 
 	function wpcc_sign_on_client_id_cb() {
 		echo '<input class="regular-text code" autocomplete="off" type="text" id="wpcc_sign_on_client_id" name="' . $this->options_prefix . 'wpcc_options[client_id]" value="' . esc_attr( $this->client_id ) . '" />';
+		if ( ! empty( $this->client_id ) ) {
+			printf( '<h2 style="display:inline; margin-left:1em;"><a href="%1$s">%2$s</a></h2>', esc_url( $this->get_edit_app_url( $this->client_id ) ), __( 'Edit app settings &rarr;', 'jetpack' ) );
+		}
 	}
 
 	function wpcc_sign_on_client_secret_cb() {
@@ -424,6 +427,10 @@ class WPCC_Sign_On {
 			'redirect_uri' => urlencode( $this->redirect_url ),
 		);
 		return add_query_arg( $args, $this->new_app_url_base );
+	}
+
+	function get_edit_app_url( $client_id ) {
+		return sprintf( 'https://developer.wordpress.com/apps/%d/', $client_id );
 	}
 }
 
