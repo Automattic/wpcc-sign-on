@@ -67,10 +67,10 @@ class WPCC_Sign_On {
 
 	function default_options() {
 		return array(
-			'client_id'         => null,
-			'client_secret'     => null,
-			'new_user_override' => null,
-			'match_by_email'    => null,
+			'client_id'         => '',
+			'client_secret'     => '',
+			'new_user_override' => false,
+			'match_by_email'    => true,
 		);
 	}
 
