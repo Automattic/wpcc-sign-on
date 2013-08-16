@@ -62,7 +62,12 @@ class WPCC_Sign_On {
 
 	function fetch_options() {
 		$options = $this->in_jetpack() ? Jetpack_Options::get_option( 'wpcc_options' ) : get_option( 'wpcc_options' );
-		return wp_parse_args( $options, $this->default_options() );
+		$args = wp_parse_args( $options, $this->default_options() );
+
+		$args['new_user_override'] = defined( 'WPCC_NEW_USER_OVERRIDE' ) ? WPCC_NEW_USER_OVERRIDE : false;
+		$args['match_by_email'] = defined( 'WPCC_MATCH_BY_EMAIL' ) ? WPCC_MATCH_BY_EMAIL : true;
+
+		return $args;
 	}
 
 	function default_options() {
@@ -97,20 +102,6 @@ class WPCC_Sign_On {
 			'general',
 			'wpcc'
 		);
-		add_settings_field(
-			'wpcc_new_user_override',
-			sprintf( '<label for="wpcc_new_user_override">%1$s</label>', __( 'New User Registration', 'jetpack' ) ),
-			array( $this, 'wpcc_new_user_override_cb' ),
-			'general',
-			'wpcc'
-		);
-		add_settings_field(
-			'wpcc_match_by_email',
-			sprintf( '<label for="wpcc_match_by_email">%1$s</label>', __( 'Match By Email', 'jetpack' ) ),
-			array( $this, 'wpcc_match_by_email_cb' ),
-			'general',
-			'wpcc'
-		);
 
 		register_setting( 'general', "{$this->options_prefix}wpcc_options", array( $this, 'sanitize_options' ) );
 
@@ -131,14 +122,6 @@ class WPCC_Sign_On {
 
 		if ( ! empty( $options['client_secret'] ) ) {
 			$options['client_secret'] = sanitize_text_field( $options['client_secret'] );
-		}
-
-		if ( isset( $options['new_user_override'] ) ) {
-			$options['new_user_override'] = intval( $options['new_user_override'] );
-		}
-
-		if ( isset( $options['match_by_email'] ) ) {
-			$options['match_by_email'] = intval( $options['match_by_email'] );
 		}
 
 		return $options;
@@ -164,16 +147,6 @@ class WPCC_Sign_On {
 		if ( empty( $this->client_id ) || empty( $this->client_secret ) ) {
 			printf( '<h2 style="display:inline; margin-left:1em;"><a href="%1$s">%2$s</a></h2>', esc_url( $this->get_new_app_url() ), __( 'Get client keys &rarr;', 'jetpack' ) );
 		}
-	}
-
-	function wpcc_new_user_override_cb() {
-		echo '<input type="checkbox" id="wpcc_new_user_override" name="' . $this->options_prefix . 'wpcc_options[new_user_override]" value="1" ' . checked( 1, $this->new_user_override, false ) . '  />';
-		printf( ' <em>%1$s</em>', __( 'If you do not ordinarily <a href="#users_can_register">let users register</a> above, this will override that and let them register through <abbr title="WordPress.com Connect">WPCC</abbr>.', 'jetpack' ) );
-	}
-
-	function wpcc_match_by_email_cb() {
-		echo '<input type="checkbox" id="wpcc_match_by_email" name="' . $this->options_prefix . 'wpcc_options[match_by_email]" value="1" ' . checked( 1, $this->match_by_email, false ) . '  />';
-		printf( ' <em>%1$s</em>', __( 'Should the user be permitted to log on if their local account email address is a match to their verified WordPress.com account email address?', 'jetpack' ) );
 	}
 
 	function edit_profile_fields( $user ) {
