@@ -406,7 +406,10 @@ class WPCC_Sign_On {
 		return add_query_arg( $args, $this->new_app_url_base );
 	}
 
-	function get_edit_app_url( $client_id ) {
+	function get_edit_app_url( $client_id = null ) {
+		if ( empty( $client_id ) ) {
+			$client_id = $this->client_id;
+		}
 		return sprintf( 'https://developer.wordpress.com/apps/%d/', $client_id );
 	}
 }
