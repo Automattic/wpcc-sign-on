@@ -83,7 +83,7 @@ class WPCC_Sign_On {
 		// Create the section
 		add_settings_section(
 			'wpcc',
-			sprintf( '<a href="%1$s">%2$s</a>', esc_url( 'http://developer.wordpress.com/docs/wpcc/' ), esc_html__( 'WordPress.com Connect', 'jetpack' ) ),
+			esc_html__( 'WordPress.com Connect', 'jetpack' ),
 			array( $this, 'wpcc_settings_section' ),
 			'general'
 		);
@@ -130,23 +130,27 @@ class WPCC_Sign_On {
 	function wpcc_settings_section() {
 		?>
 
-		<p id="wpcc-sign-on-section"><?php _e( 'Sign-on with your WordPress.com account!', 'jetpack' ); ?></p>
+		<p id="wpcc-sign-on-section">
+			<?php
+				printf( __( 'Log-in with <a href="%s">WordPress.com Connect</a>.', 'jetpack' ), 'http://en.blog.wordpress.com/2013/08/13/introducing-wordpress-com-connect/' );
+				echo ' ';
+				if ( empty( $this->client_id ) || empty( $this->client_secret ) ) {
+					printf( __( 'Visit WordPress.com to <a href="%s">register a new WPCC client id and secret key</a>.', 'jetpack' ), $this->get_new_app_url() );
+				} else {
+					printf( __( 'Visit WordPress.com to <a href="%s">manage your WPCC client settings</a>.', 'jetpack' ), $this->get_edit_app_url() );
+				}
+			?>
+		</p>
 
 		<?php
 	}
 
 	function wpcc_sign_on_client_id_cb() {
 		echo '<input class="regular-text code" autocomplete="off" type="text" id="wpcc_sign_on_client_id" name="' . $this->options_prefix . 'wpcc_options[client_id]" value="' . esc_attr( $this->client_id ) . '" />';
-		if ( ! empty( $this->client_id ) ) {
-			printf( '<h2 style="display:inline; margin-left:1em;"><a href="%1$s">%2$s</a></h2>', esc_url( $this->get_edit_app_url( $this->client_id ) ), __( 'Edit app settings &rarr;', 'jetpack' ) );
-		}
 	}
 
 	function wpcc_sign_on_client_secret_cb() {
 		echo '<input class="regular-text code" autocomplete="off" type="text" id="wpcc_sign_on_client_secret" name="' . $this->options_prefix . 'wpcc_options[client_secret]" value="' . esc_attr( $this->client_secret ) . '" />';
-		if ( empty( $this->client_id ) || empty( $this->client_secret ) ) {
-			printf( '<h2 style="display:inline; margin-left:1em;"><a href="%1$s">%2$s</a></h2>', esc_url( $this->get_new_app_url() ), __( 'Get client keys &rarr;', 'jetpack' ) );
-		}
 	}
 
 	function edit_profile_fields( $user ) {
