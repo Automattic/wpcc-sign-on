@@ -105,14 +105,24 @@ class WPCC_Sign_On {
 
 		register_setting( 'general', "{$this->options_prefix}wpcc_options", array( $this, 'sanitize_options' ) );
 
-		if ( ! empty( $this->client_id ) ) {
+		if ( ! empty( $this->client_id ) && ! empty( $this->client_secret ) ) {
 			add_action( 'show_user_profile', array( $this, 'edit_profile_fields' ) ); // For their own profile
 			add_action( 'edit_user_profile', array( $this, 'edit_profile_fields' ) ); // For folks editing others profiles
+		} else {
+			add_action( 'admin_notices', array( $this, 'no_credentials_admin_notice' ) );
 		}
 
 		if ( $user_ID = get_current_user_id() ) {
 			$this->wpcc_state = "localuser{$user_ID}";
 		}
+	}
+
+	function no_credentials_admin_notice() {
+		?>
+		<div id="wpcc-needs-config" class="updated">
+			<p><?php printf( __( '<strong>Almost done.</strong> Before WordPress.com Connect can finish activating, you\'ll need to <a href="%s">register your website as an application on WordPress.com</a>', 'jetpack' ), esc_url( admin_url( 'options-general.php#wpcc-sign-on-section' ) ) ); ?></p>
+		</div>
+		<?php
 	}
 
 	function sanitize_options( $options ) {
